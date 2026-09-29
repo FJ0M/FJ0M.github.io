@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Freddie Gabbutt-Martin · Protein design & physics-based modelling</title>
-<meta name="description" content="Freddie Gabbutt-Martin, Senior Scientist at Schrödinger. Protein design, AI methods and physics-based calculation for drug discovery.">
+<meta name="description" content="Freddie Gabbutt-Martin, Biologics All Access Applications Scientist at Schrödinger. Protein design, AI methods and physics-based calculation for drug discovery.">
 <meta property="og:title" content="Freddie Gabbutt-Martin">
 <meta property="og:description" content="Protein design, AI methods and physics-based calculation for drug discovery.">
 <meta property="og:image" content="https://fj0m.github.io/images/rotary-motors-1000.jpg">
@@ -77,11 +77,12 @@ p { margin: 0; max-width: 66ch }
 .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 14px }
 .gallery figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column }
 .gallery figure.hero-fig { grid-column: 1 / -1 }
-.gallery a { display: block; flex: 1; background: #e9ecef }
+.gallery > figure > a { display: block; flex: 1; background: #e9ecef }
 .gallery img { width: 100%; height: 100%; object-fit: cover }
 .gallery figure:not(.hero-fig) img { aspect-ratio: 16 / 10 }
 .gallery figcaption { padding: 12px 16px; font-size: 14px; color: var(--muted) }
 .gallery figcaption b { color: var(--fg); font-weight: 600 }
+.gallery figcaption a { color: var(--fg) }
 
 .role { display: grid; grid-template-columns: 120px 1fr; gap: 4px 22px; padding-block: 18px; border-top: 1px solid var(--line) }
 .role:first-child { border-top: 0; padding-top: 4px }
@@ -125,7 +126,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <body>
 <div class="wrap">
   <nav class="top" aria-label="Sections">
-    <a href="#about">About</a><a href="#schrodinger">Schrödinger</a><a href="#illustration">Illustration</a><a href="#experience">Experience</a><a href="#publications">Publications</a><a href="#more">More</a>
+    <a href="#about">About</a><a href="#schrodinger">Schrödinger</a><a href="#illustration">Illustration</a><a href="#experience">Experience</a><a href="#publications">Publications</a><a href="#talks">Talks</a><a href="#more">More</a>
   </nav>
 
   <header class="hero">
@@ -137,7 +138,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
       </div>
     </div>
     <div class="tagline"><span>protein design</span><span>AI methods</span><span>physics-based calculation</span><span>lead optimisation</span></div>
-    <p class="meta">Senior Scientist I at Schrödinger · Stroud, UK · Published as F. J. O. Martin</p>
+    <p class="meta">Biologics All Access Applications Scientist at Schrödinger · Stroud, UK · Published as F. J. O. Martin</p>
     <div class="links">
       <a href="https://scholar.google.com/citations?user=njpFdBUAAAAJ&amp;hl=en">Google Scholar</a>
       <a href="https://orcid.org/0000-0001-6456-2860">ORCID</a>
@@ -157,7 +158,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   <section id="schrodinger" style="--accent: var(--c2)">
     <h2>Now at Schrödinger</h2>
     <div class="feature">
-      <p>Senior Scientist I since September 2025. I apply free energy calculations and physics-based modelling to lead optimisation, run projects in LiveDesign, and present the science at workshops and conferences.</p>
+      <p>Biologics All Access Applications Scientist since September 2025. I apply free energy calculations and physics-based modelling to lead optimisation, run projects in LiveDesign, and present the science at workshops and conferences.</p>
       <div class="pillars">
         <div class="pillar" style="--k: var(--c1)"><b>Free energy methods</b>Relative binding free energies to rank and prioritise designs</div>
         <div class="pillar" style="--k: var(--c2)"><b>LiveDesign</b>Project workspaces that join models, data and decisions</div>
@@ -176,12 +177,12 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
       <figcaption><b>Ion-driven rotary motors.</b> PomAB, the human F-type ATP synthase, GldLM and ExbBD set in the inner membrane, with the flagellar motor, type-9 secretion system and Ton import complex behind.</figcaption>
     </figure>
     <figure>
-      <a href="images/membrane-complex-1600.jpg"><picture><source type="image/webp" srcset="images/membrane-complex-800.webp 800w, images/membrane-complex-1600.webp 1600w" sizes="(max-width: 600px) 100vw, 540px"><img src="images/membrane-complex-800.jpg" width="800" height="450" loading="lazy" alt="Membrane complexes with green periplasmic domains and pink helical transmembrane bundles in an orange lipid bilayer, on a dark background"></picture></a>
-      <figcaption><b>Membrane complexes in a bilayer.</b> Blender render with depth of field.</figcaption>
+      <a href="images/membrane-complex-1600.jpg"><picture><source type="image/webp" srcset="images/membrane-complex-800.webp 800w, images/membrane-complex-1600.webp 1600w" sizes="(max-width: 600px) 100vw, 540px"><img src="images/membrane-complex-800.jpg" width="800" height="450" loading="lazy" alt="Zorya anti-phage defence complexes: green periplasmic domains on pink helical transmembrane bundles in an orange lipid bilayer, on a dark background"></picture></a>
+      <figcaption>Graphic to advertise the preprint of our <a href="#publications">Zorya manuscript</a>.</figcaption>
     </figure>
     <figure>
       <a href="images/membrane-protein-1080.jpg"><picture><source type="image/webp" srcset="images/membrane-protein-600.webp 600w, images/membrane-protein-1080.webp 1080w" sizes="(max-width: 600px) 100vw, 540px"><img src="images/membrane-protein-600.jpg" width="600" height="600" loading="lazy" alt="Blue membrane protein dimer with side chains shown, spanning a lipid bilayer"></picture></a>
-      <figcaption><b>Membrane protein dimer.</b> Cartoon with side chains, spanning a lipid bilayer.</figcaption>
+      <figcaption>Example graphic from the structural gallery for the <a href="https://nmitaylor.com/">Taylor group website</a>.</figcaption>
     </figure>
   </div>
 </section>
@@ -190,7 +191,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   <section id="experience" style="--accent: var(--c4)">
     <h2>Experience</h2>
     <div>
-      <div class="role"><div class="when">2025 – now</div><div><h3>Senior Scientist I</h3><div class="org"><a href="https://www.schrodinger.com">Schrödinger</a> · UK, hybrid</div>
+      <div class="role"><div class="when">2025 – now</div><div><h3>Biologics All Access Applications Scientist</h3><div class="org"><a href="https://www.schrodinger.com">Schrödinger</a> · UK, hybrid</div>
         <p>Free energy methods, LiveDesign and lead optimisation for drug discovery; workshops and conference presentations.</p></div></div>
       <div class="role"><div class="when">2022 – 2025</div><div><h3>Postdoctoral Research Associate</h3><div class="org"><a href="https://www.cpr.ku.dk/">Novo Nordisk Foundation Center for Protein Research</a>, University of Copenhagen</div>
         <ul>
@@ -235,6 +236,14 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
     <div id="pubs"></div>
   </section>
 
+  <section id="talks" style="--accent: var(--c4)">
+    <h2>Talks & workshops</h2>
+    <div class="list">
+      <div class="item"><div class="when">2026</div><div><b>Talk</b><div class="org">3rd BioExcel Conference on Advances in Biomolecular Simulations</div></div></div>
+      <div class="item"><div class="when">2026</div><div><b>Hands-on workshop</b><div class="org">Schrödinger European User Group Meeting</div></div></div>
+    </div>
+  </section>
+
   <section id="more" style="--accent: var(--c3)">
     <h2>Projects</h2>
     <div class="list">
@@ -251,8 +260,8 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
       <div class="list">
         <div class="item"><div class="when">2026</div><div><b>Demo2Win! Masterclass</b><div class="org">2Win! Global</div></div></div>
         <div class="item"><div class="when">2025</div><div><b>Introduction to Computational Antibody Engineering</b><div class="org">Schrödinger</div></div></div>
-        <div class="item"><div class="when">2022 – 2025</div><div><b>EMBO Laboratory Leadership Course</b><div class="org">EMBO</div></div></div>
-        <div class="item"><div class="when">2022 – 2025</div><div><b>From Excel to R</b><div class="org">University of Copenhagen</div></div></div>
+        <div class="item"><div class="when">2024</div><div><b>Laboratory Leadership Course</b><div class="org">EMBO</div></div></div>
+        <div class="item"><div class="when">2013</div><div><b>Duke of Edinburgh Gold Award</b><div class="org">The Duke of Edinburgh's Award</div></div></div>
       </div>
     </section>
     <section style="--accent: var(--c1)">
