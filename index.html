@@ -103,6 +103,14 @@ p { margin: 0; max-width: 66ch }
 .authors { font-size: 14px; color: var(--muted) }
 .authors b { color: var(--fg); font-weight: 600 }
 .src { font: 12px/1.6 var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px }
+.filters { display: flex; flex-wrap: wrap; gap: 6px }
+.filter { font: 500 13px/1 var(--mono); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer }
+.filter span { color: var(--muted); margin-left: 4px }
+.filter[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.filter[aria-pressed="true"] span { color: inherit; opacity: .7 }
+.tag { font: 500 11px/1 var(--mono); padding: 3px 7px; border-radius: 5px; border: 1px solid var(--t, var(--line)); color: var(--t, var(--muted)); align-self: center }
+.tag[data-cat="AI"] { --t: var(--c1) } .tag[data-cat="Protein Design"] { --t: var(--c2) }
+.tag[data-cat="Molecular Machines"] { --t: var(--c4) } .tag[data-cat="Chemistry"] { --t: var(--c3) }
 .badge { font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 5px; background: var(--fg); color: var(--bg); align-self: center }
 
 .list { display: grid; gap: 12px }
@@ -238,6 +246,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
       <div class="metric"><b>9</b><span>h-index</span></div>
       <p>From <a href="https://scholar.google.com/citations?user=njpFdBUAAAAJ&amp;hl=en">Google Scholar</a>, September 2026. Papers before 2026 are under F. J. O. Martin.</p>
     </div>
+    <div class="filters" id="pubFilter" role="group" aria-label="Filter publications by topic"></div>
     <div id="pubs"></div>
   </section>
 
@@ -283,32 +292,45 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <script>
 // Publications (Google Scholar, September 2026). "me" marks my position in the author list.
 const PUBS = [
-  { y: 2026, t: "A benchmark of expert-level academic questions to assess AI capabilities", a: "L Phan, A Gatti, … <b>FJO Martin</b>, … (Center for AI Safety and Scale AI)", v: "Nature 649, 1139–1146", c: 729 },
-  { y: 2026, t: "Structure of a contractile injection system in Salmonella enterica subsp. salamae", a: "RN Ejaz, K Funke, CS Kielkopf, <b>FJO Martin</b>, M Šiborová, IA Hendriks, …", v: "Nature Communications", c: 1 },
-  { y: 2026, t: "Validation and analysis of 12,000 AI-driven CAR-T designs in the Bits to Binders competition", a: "CW Kosonocky, AM Abel, AL Feller, AEC Rieffer, PR Woolley, J Lála, … incl. <b>FJO Martin</b>", v: "bioRxiv", c: 10 },
-  { y: 2025, t: "Structure and mechanism of the Zorya anti-phage defence system", a: "H Hu, PF Popp, TCD Hughes, A Roa-Eguiara, NR Rutbeek, <b>FJO Martin</b>, …", v: "Nature 639, 1093–1101", c: 73 },
-  { y: 2025, t: "Exchange, promiscuity, and orthogonality in de novo designed coiled-coil peptide assemblies", a: "KW Kurgan, <b>FJO Martin</b>, WM Dawson, T Brunnock, AJ Orr-Ewing, …", v: "Chemical Science 16, 1826–1836", c: 4 },
-  { y: 2024, t: "Ion-driven rotary membrane motors: From structure to function", a: "<b>FJO Martin</b>, M Santiveri, H Hu, NMI Taylor", v: "Current Opinion in Structural Biology 88, 102884", c: 6, first: true },
-  { y: 2024, t: "How might large language models aid actors in reaching the competency threshold required to carry out a chemical attack?", a: "RT Stendall, <b>FJO Martin</b>, JB Sandbrink", v: "The Nonproliferation Review, 1–22", c: 12 },
-  { y: 2023, t: "Differential sensing with arrays of de novo designed peptide assemblies", a: "WM Dawson, KL Shelley, JM Fletcher, DA Scott, L Lombardi, GG Rhys, …", v: "Nature Communications 14, 383", c: 42 },
-  { y: 2023, t: "Ion selectivity and rotor coupling of the Vibrio flagellar sodium-driven stator unit", a: "H Hu, PF Popp, M Santiveri, A Roa-Eguiara, Y Yan, <b>FJO Martin</b>, Z Liu, …", v: "Nature Communications 14, 4411", c: 37 },
-  { y: 2023, t: "Molecular mechanism of STIL coiled-coil domain oligomerization", a: "M Shamir, <b>FJO Martin</b>, DN Woolfson, A Friedler", v: "International Journal of Molecular Sciences 24, 14616", c: 4 },
-  { y: 2022, t: "Exploring the dynamic and conformational landscape of α-helical peptide assemblies", a: "<b>F Martin</b>", v: "PhD thesis, University of Bristol", c: 1, first: true, thesis: true },
-  { y: 2021, t: "Coiled coils 9-to-5: rational de novo design of α-helical barrels with tunable oligomeric states", a: "WM Dawson, <b>FJO Martin</b>, GG Rhys, KL Shelley, RL Brady, DN Woolfson", v: "Chemical Science 12, 6923–6928", c: 74 },
-  { y: 2021, t: "How coiled-coil assemblies accommodate multiple aromatic residues", a: "GG Rhys, WM Dawson, JL Beesley, <b>FJO Martin</b>, RL Brady, AR Thomson, …", v: "Biomacromolecules 22, 2010–2019", c: 12 },
-  { y: 2020, t: "Azulenesulfonium and azulenebis(sulfonium) salts: formation by interrupted Pummerer reaction and subsequent derivatisation by nucleophiles", a: "CM Lopez-Alled, <b>FJO Martin</b>, KY Chen, G Kociok-Köhn, TD James, …", v: "Tetrahedron 76, 131700", c: 16 },
+  { y: 2026, t: "A benchmark of expert-level academic questions to assess AI capabilities", a: "L Phan, A Gatti, … <b>FJO Martin</b>, … (Center for AI Safety and Scale AI)", v: "Nature 649, 1139–1146", k: ["AI"], c: 729 },
+  { y: 2026, t: "Structure of a contractile injection system in Salmonella enterica subsp. salamae", a: "RN Ejaz, K Funke, CS Kielkopf, <b>FJO Martin</b>, M Šiborová, IA Hendriks, …", v: "Nature Communications", k: ["Molecular Machines"], c: 1 },
+  { y: 2026, t: "Validation and analysis of 12,000 AI-driven CAR-T designs in the Bits to Binders competition", a: "CW Kosonocky, AM Abel, AL Feller, AEC Rieffer, PR Woolley, J Lála, … incl. <b>FJO Martin</b>", v: "bioRxiv", k: ["AI", "Protein Design"], c: 10 },
+  { y: 2025, t: "Structure and mechanism of the Zorya anti-phage defence system", a: "H Hu, PF Popp, TCD Hughes, A Roa-Eguiara, NR Rutbeek, <b>FJO Martin</b>, …", v: "Nature 639, 1093–1101", k: ["Molecular Machines"], c: 73 },
+  { y: 2025, t: "Exchange, promiscuity, and orthogonality in de novo designed coiled-coil peptide assemblies", a: "KW Kurgan, <b>FJO Martin</b>, WM Dawson, T Brunnock, AJ Orr-Ewing, …", v: "Chemical Science 16, 1826–1836", k: ["Protein Design"], c: 4, first: true },
+  { y: 2024, t: "Ion-driven rotary membrane motors: From structure to function", a: "<b>FJO Martin</b>, M Santiveri, H Hu, NMI Taylor", v: "Current Opinion in Structural Biology 88, 102884", k: ["Molecular Machines"], c: 6, first: true },
+  { y: 2024, t: "How might large language models aid actors in reaching the competency threshold required to carry out a chemical attack?", a: "RT Stendall, <b>FJO Martin</b>, JB Sandbrink", v: "The Nonproliferation Review, 1–22", k: ["AI"], c: 12 },
+  { y: 2023, t: "Differential sensing with arrays of de novo designed peptide assemblies", a: "WM Dawson, KL Shelley, JM Fletcher, DA Scott, L Lombardi, GG Rhys, …", v: "Nature Communications 14, 383", k: ["Protein Design"], c: 42 },
+  { y: 2023, t: "Ion selectivity and rotor coupling of the Vibrio flagellar sodium-driven stator unit", a: "H Hu, PF Popp, M Santiveri, A Roa-Eguiara, Y Yan, <b>FJO Martin</b>, Z Liu, …", v: "Nature Communications 14, 4411", k: ["Molecular Machines"], c: 37 },
+  { y: 2023, t: "Molecular mechanism of STIL coiled-coil domain oligomerization", a: "M Shamir, <b>FJO Martin</b>, DN Woolfson, A Friedler", v: "International Journal of Molecular Sciences 24, 14616", k: ["Protein Design"], c: 4, first: true },
+  { y: 2022, t: "Exploring the dynamic and conformational landscape of α-helical peptide assemblies", a: "<b>F Martin</b>", v: "PhD thesis, University of Bristol", k: ["Protein Design"], c: 1, first: true, thesis: true },
+  { y: 2021, t: "Coiled coils 9-to-5: rational de novo design of α-helical barrels with tunable oligomeric states", a: "WM Dawson, <b>FJO Martin</b>, GG Rhys, KL Shelley, RL Brady, DN Woolfson", v: "Chemical Science 12, 6923–6928", k: ["Protein Design"], c: 74 },
+  { y: 2021, t: "How coiled-coil assemblies accommodate multiple aromatic residues", a: "GG Rhys, WM Dawson, JL Beesley, <b>FJO Martin</b>, RL Brady, AR Thomson, …", v: "Biomacromolecules 22, 2010–2019", k: ["Protein Design"], c: 12 },
+  { y: 2020, t: "Azulenesulfonium and azulenebis(sulfonium) salts: formation by interrupted Pummerer reaction and subsequent derivatisation by nucleophiles", a: "CM Lopez-Alled, <b>FJO Martin</b>, KY Chen, G Kociok-Köhn, TD James, …", v: "Tetrahedron 76, 131700", k: ["Chemistry"], c: 16 },
 ];
 (() => {
-  const host = document.getElementById('pubs');
-  let year = null, html = '';
-  for (const p of PUBS) {
-    if (p.y !== year) { year = p.y; html += `<div class="year">${year}</div>`; }
-    const q = encodeURIComponent(`"${p.t}"`);
-    html += `<article class="pub"><h3><a href="https://scholar.google.com/scholar?q=${q}">${p.t}</a></h3>
+  const host = document.getElementById('pubs'), bar = document.getElementById('pubFilter');
+  const CATS = ['All', 'AI', 'Protein Design', 'Molecular Machines', 'Chemistry'];
+  const count = c => c === 'All' ? PUBS.length : PUBS.filter(p => p.k.includes(c)).length;
+  bar.innerHTML = CATS.map(c => `<button type="button" class="filter" data-cat="${c}" aria-pressed="${c === 'All'}">${c} <span>${count(c)}</span></button>`).join('');
+  function render(cat) {
+    let year = null, html = '';
+    for (const p of PUBS) {
+      if (cat !== 'All' && !p.k.includes(cat)) continue;
+      if (p.y !== year) { year = p.y; html += `<div class="year">${year}</div>`; }
+      const q = encodeURIComponent(`"${p.t}"`);
+      const tags = p.k.map(k => `<span class="tag" data-cat="${k}">${k}</span>`).join('');
+      html += `<article class="pub"><h3><a href="https://scholar.google.com/scholar?q=${q}">${p.t}</a></h3>
       <div class="authors">${p.a}</div>
-      <div class="src"><span>${p.v}</span><span>${p.c.toLocaleString('en-GB')} citation${p.c === 1 ? '' : 's'}</span>${p.first ? `<span class="badge">${p.thesis ? 'thesis' : 'first author'}</span>` : ''}</div></article>`;
+      <div class="src"><span>${p.v}</span><span>${p.c.toLocaleString('en-GB')} citation${p.c === 1 ? '' : 's'}</span>${p.first ? `<span class="badge">${p.thesis ? 'thesis' : 'first author'}</span>` : ''}${tags}</div></article>`;
+    }
+    host.innerHTML = html;
   }
-  host.innerHTML = html;
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('.filter'); if (!b) return;
+    bar.querySelectorAll('.filter').forEach(x => x.setAttribute('aria-pressed', x === b));
+    render(b.dataset.cat);
+  });
+  render('All');
 })();
 
 // Coiled coil: Crick-style parametric four-helix bundle, drawn as shaded Cα spheres
