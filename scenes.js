@@ -4,7 +4,7 @@ const STRUCTS = {"motor":{"A":[[-6.7,-29.4,-18.1],[-10.4,-29.9,-18.3],[-11.2,-28
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let col = {}, sprites = {};
-  const readColors = () => { const s = getComputedStyle(document.documentElement); for (const k of ['c1','c2','c3','c4','fg','muted','line','bg','surface']) col[k] = s.getPropertyValue('--' + k).trim(); col.pink = col.bg < '#5' ? '#f0a3c4' : '#d77fa6'; col.teal = col.bg < '#5' ? '#8ee0d6' : '#58b3a6'; sprites = {}; };
+  const readColors = () => { const s = getComputedStyle(document.documentElement); for (const k of ['c1','c2','c3','c4','fg','muted','line','bg','surface']) col[k] = s.getPropertyValue('--' + k).trim(); col.pink = '#ffa8a8'; col.teal = '#9fe4de'; sprites = {}; };
   readColors(); matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readColors);
 
   function setup(id, draw, still = 4000) {
@@ -22,11 +22,15 @@ const STRUCTS = {"motor":{"A":[[-6.7,-29.4,-18.1],[-10.4,-29.9,-18.3],[-11.2,-28
     requestAnimationFrame(loop);
     return cv;
   }
+  // darker rim so pale palette colours (gold, cyan) still read against the light background
+  const shade = c => { const m = /^#([0-9a-f]{6})$/i.exec(c); if (!m) return c; const n = parseInt(m[1], 16); return `rgb(${(n >> 16) * .72 | 0},${(n >> 8 & 255) * .72 | 0},${(n & 255) * .72 | 0})`; };
+  // dark or light letters, whichever reads on a filled palette colour
+  const inkOn = c => { const m = /^#([0-9a-f]{6})$/i.exec(c); if (!m) return col.fg; const n = parseInt(m[1], 16), L = .299 * (n >> 16) + .587 * (n >> 8 & 255) + .114 * (n & 255); return L > 150 ? '#292f36' : '#f7fff7'; };
   function ball(ctx, x, y, r, c, a = 1) {
     if (r <= 0) return;
     ctx.globalAlpha = a;
     const g = ctx.createRadialGradient(x - r * .35, y - r * .35, r * .1, x, y, r);
-    g.addColorStop(0, '#ffffff'); g.addColorStop(.35, c); g.addColorStop(1, c);
+    g.addColorStop(0, '#ffffff'); g.addColorStop(.35, c); g.addColorStop(1, shade(c));
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
   }
   // cached sphere sprite per colour, for scenes with many atoms
@@ -34,7 +38,7 @@ const STRUCTS = {"motor":{"A":[[-6.7,-29.4,-18.1],[-10.4,-29.9,-18.3],[-11.2,-28
     if (sprites[c]) return sprites[c];
     const s = document.createElement('canvas'); s.width = s.height = 64;
     const x = s.getContext('2d'), g = x.createRadialGradient(20.8, 20.8, 3.2, 32, 32, 32);
-    g.addColorStop(0, '#ffffff'); g.addColorStop(.35, c); g.addColorStop(1, c);
+    g.addColorStop(0, '#ffffff'); g.addColorStop(.35, c); g.addColorStop(1, shade(c));
     x.fillStyle = g; x.beginPath(); x.arc(32, 32, 32, 0, Math.PI * 2); x.fill();
     return sprites[c] = s;
   }
@@ -115,14 +119,14 @@ const STRUCTS = {"motor":{"A":[[-6.7,-29.4,-18.1],[-10.4,-29.9,-18.3],[-11.2,-28
       if (wide) {
         const x0 = W * .72, x1 = W - 22, y = H * .56, n = 12;
         mono(ctx, 12); ctx.fillStyle = col.muted; ctx.fillText('λ', x0 - 16, y);
-        for (let i = 0; i < n; i++) { const x = x0 + (x1 - x0) * i / (n - 1), on = i / (n - 1) <= lam + 1e-6; ctx.fillStyle = on ? col.c3 : col.line; ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.fill(); }
+        for (let i = 0; i < n; i++) { const x = x0 + (x1 - x0) * i / (n - 1), on = i / (n - 1) <= lam + 1e-6; ctx.fillStyle = on ? col.c2 : col.line; ctx.beginPath(); ctx.arc(x, y, 4, 0, 7); ctx.fill(); }
         ctx.fillStyle = col.muted; ctx.fillText('Ser', x0 - 8, y + 22); ctx.textAlign = 'right'; ctx.fillText('Tyr', x1 + 8, y + 22); ctx.textAlign = 'left';
         mono(ctx, 15); ctx.fillStyle = col.fg; ctx.fillText(`ΔΔG ${sign}${Math.abs(dG).toFixed(2)}`, x0 - 16, y - 46);
         mono(ctx, 11); ctx.fillStyle = col.muted; ctx.fillText(`kcal/mol · λ = ${lam.toFixed(2)}`, x0 - 16, y - 24);
         
       } else {
         const n = 12, x0 = 20, x1 = W - 20, y = H - 10;
-        for (let i = 0; i < n; i++) { const x = x0 + (x1 - x0) * i / (n - 1), on = i / (n - 1) <= lam + 1e-6; ctx.fillStyle = on ? col.c3 : col.line; ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 7); ctx.fill(); }
+        for (let i = 0; i < n; i++) { const x = x0 + (x1 - x0) * i / (n - 1), on = i / (n - 1) <= lam + 1e-6; ctx.fillStyle = on ? col.c2 : col.line; ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 7); ctx.fill(); }
         mono(ctx, 12); ctx.fillStyle = col.fg; ctx.fillText(`ΔΔG ${sign}${Math.abs(dG).toFixed(2)}`, 12, 16);
       }
       ctx.globalAlpha = 1;
@@ -294,8 +298,8 @@ const STRUCTS = {"motor":{"A":[[-6.7,-29.4,-18.1],[-10.4,-29.9,-18.3],[-11.2,-28
           const p = w.pos(k), isCore = k === 0 || k === 3, hit = h === h0 && pts[h * N + cur].k === k;
           ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(p[0], p[1], pr * (hit ? 1.25 : 1), 0, 7);
           ctx.fillStyle = isCore ? col4[h] : col.bg; ctx.fill();
-          ctx.strokeStyle = hit ? col.fg : col4[h]; ctx.lineWidth = hit ? 2.2 : 1.2; ctx.stroke();
-          mono(ctx, Math.round(pr * 1.15), 600); ctx.textAlign = 'center'; ctx.fillStyle = isCore ? col.bg : col.fg;
+          ctx.strokeStyle = hit ? col.fg : shade(col4[h]); ctx.lineWidth = hit ? 2.2 : 1.2; ctx.stroke();
+          mono(ctx, Math.round(pr * 1.15), 600); ctx.textAlign = 'center'; ctx.fillStyle = isCore ? inkOn(col4[h]) : col.fg;
           ctx.fillText(L7[k], p[0], p[1] + .5); ctx.textAlign = 'left';
         }
       });
@@ -356,7 +360,7 @@ const STRUCTS = {"motor":{"A":[[-6.7,-29.4,-18.1],[-10.4,-29.9,-18.3],[-11.2,-28
         ring.forEach((p, k) => line(ctx, [p, ring[(k + 1) % 5]], col.fg, 2, al * .8));
         line(ctx, [A[i], ring[0]], col.fg, 2, clamp((arrive - .9) / .1) * .8);
         ball(ctx, ring[0][0], ring[0][1], L * .28, col.c3, al);
-        mono(ctx, 13, 600); ctx.globalAlpha = al; ctx.fillStyle = col.c3; ctx.textAlign = 'center';
+        mono(ctx, 13, 600); ctx.globalAlpha = al; ctx.fillStyle = col.c2; ctx.textAlign = 'center';
         ctx.fillText('+', ring[0][0] + (n ? 1 : -1) * L * .1, ring[0][1] - L * .5); ctx.textAlign = 'left'; ctx.globalAlpha = 1;
       });
       A.forEach((p, i) => { if (i === 0 || i === 2) ball(ctx, p[0], p[1], L * .14, col.fg, .9); });
