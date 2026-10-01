@@ -18,16 +18,17 @@
 <style>
 /* Layout: one calm reading column; a thin four-colour rule opens the page and its four chain colours become the section accents */
 :root {
-  --bg: #f5f6f8; --surface: #ffffff; --fg: #121820; --muted: #5b6573; --line: #dde1e7;
-  --c1: #0f8b8d; --c2: #d4573b; --c3: #b8850f; --c4: #6b5bd2;
+  /* palette: Jet Black #292f36, Strong Cyan #4ecdc4, Mint Cream #f7fff7, Grapefruit Pink #ff6b6b, Royal Gold #ffe66d */
+  --bg: #f7fff7; --surface: #ffffff; --fg: #292f36; --muted: #59626c; --line: #d9e5da;
+  --c1: #4ecdc4; --c2: #ff6b6b; --c3: #ffe66d; --c4: #292f36;
   --display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
   --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0c1117; --surface: #121a23; --fg: #e8edf3; --muted: #93a0b0; --line: #223040;
-    --c1: #3cc2c4; --c2: #f07d62; --c3: #e8b44a; --c4: #9a8cf0;
+    --bg: #292f36; --surface: #323a43; --fg: #f7fff7; --muted: #aab4be; --line: #434d58;
+    --c1: #4ecdc4; --c2: #ff6b6b; --c3: #ffe66d; --c4: #f7fff7;
   }
 }
 * { box-sizing: border-box }
@@ -53,8 +54,9 @@ header.hero { padding-block: 16px 0 }
 .avatar { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; flex: none; border: 1px solid var(--line) }
 h1 { font: 400 clamp(40px, 8vw, 66px)/1 var(--display); margin: 0; letter-spacing: -.01em; text-wrap: balance }
 .tagline { display: flex; flex-wrap: wrap; gap: 4px 14px; font: 500 14px/1.5 var(--mono); margin: 12px 0 0 }
-.tagline span:nth-child(4n+1) { color: var(--c1) } .tagline span:nth-child(4n+2) { color: var(--c2) }
-.tagline span:nth-child(4n+3) { color: var(--c3) } .tagline span:nth-child(4n+4) { color: var(--c4) }
+.tagline span { text-decoration: underline 3px var(--u); text-underline-offset: 5px; text-decoration-skip-ink: none }
+.tagline span:nth-child(4n+1) { --u: var(--c1) } .tagline span:nth-child(4n+2) { --u: var(--c2) }
+.tagline span:nth-child(4n+3) { --u: var(--c3) } .tagline span:nth-child(4n+4) { --u: var(--c4) }
 .meta { color: var(--muted); font-size: 14px; margin: 8px 0 0 }
 .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px }
 .links a, .copy { font: 500 13px/1 var(--mono); padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; background: var(--surface); color: var(--fg); cursor: pointer }
@@ -62,7 +64,7 @@ h1 { font: 400 clamp(40px, 8vw, 66px)/1 var(--display); margin: 0; letter-spacin
 
 section { padding-block: 48px 0; display: grid; gap: 16px; scroll-margin-top: 16px }
 h2 { font: 400 32px/1.1 var(--display); margin: 0; display: flex; align-items: baseline; gap: 12px }
-h2::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent, var(--c1)); flex: none; transform: translateY(-5px) }
+h2::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent, var(--c1)); box-shadow: 0 0 0 1px rgb(41 47 54 / .18); flex: none; transform: translateY(-5px) }
 h3 { margin: 0 }
 p { margin: 0; max-width: 66ch }
 .lede { font-size: 18px; line-height: 1.6 }
@@ -76,7 +78,7 @@ p { margin: 0; max-width: 66ch }
 .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 14px }
 .gallery figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column }
 .gallery figure.hero-fig { grid-column: 1 / -1 }
-.gallery > figure > a { display: block; flex: 1; background: #e9ecef }
+.gallery > figure > a { display: block; flex: 1; background: var(--line) }
 .gallery img { width: 100%; height: 100%; object-fit: cover }
 .gallery figure:not(.hero-fig) img { aspect-ratio: 16 / 10 }
 .gallery figcaption { padding: 12px 16px; font-size: 14px; color: var(--muted) }
@@ -108,7 +110,7 @@ p { margin: 0; max-width: 66ch }
 .filter span { color: var(--muted); margin-left: 4px }
 .filter[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
 .filter[aria-pressed="true"] span { color: inherit; opacity: .7 }
-.tag { font: 500 11px/1 var(--mono); padding: 3px 7px; border-radius: 5px; border: 1px solid var(--t, var(--line)); color: var(--t, var(--muted)); align-self: center }
+.tag { font: 500 11px/1 var(--mono); padding: 3px 7px; border-radius: 5px; border: 1px solid var(--t, var(--line)); color: var(--fg); box-shadow: inset 3px 0 0 var(--t, var(--line)); align-self: center }
 .tag[data-cat="AI"] { --t: var(--c1) } .tag[data-cat="Protein Design"] { --t: var(--c2) }
 .tag[data-cat="Molecular Machines"] { --t: var(--c4) } .tag[data-cat="Chemistry"] { --t: var(--c3) }
 .badge { font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 5px; background: var(--fg); color: var(--bg); align-self: center }
