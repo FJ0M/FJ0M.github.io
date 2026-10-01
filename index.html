@@ -46,7 +46,7 @@ nav.top a { text-decoration: none }
 nav.top a:hover { color: var(--fg) }
 
 header.hero { padding-block: 16px 0 }
-#bundle { width: 100%; height: 250px; display: block; cursor: grab; touch-action: pan-y }
+#bundle { width: 100%; height: 260px; display: block; cursor: grab; touch-action: pan-y }
 #bundle:active { cursor: grabbing }
 .who { display: flex; gap: 20px; align-items: center; margin-top: -4px }
 .who > div { min-width: 0 }
@@ -103,6 +103,14 @@ p { margin: 0; max-width: 66ch }
 .authors { font-size: 14px; color: var(--muted) }
 .authors b { color: var(--fg); font-weight: 600 }
 .src { font: 12px/1.6 var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px }
+.filters { display: flex; flex-wrap: wrap; gap: 6px }
+.filter { font: 500 13px/1 var(--mono); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer }
+.filter span { color: var(--muted); margin-left: 4px }
+.filter[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.filter[aria-pressed="true"] span { color: inherit; opacity: .7 }
+.tag { font: 500 11px/1 var(--mono); padding: 3px 7px; border-radius: 5px; border: 1px solid var(--t, var(--line)); color: var(--t, var(--muted)); align-self: center }
+.tag[data-cat="AI"] { --t: var(--c1) } .tag[data-cat="Protein Design"] { --t: var(--c2) }
+.tag[data-cat="Molecular Machines"] { --t: var(--c4) } .tag[data-cat="Chemistry"] { --t: var(--c3) }
 .badge { font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 5px; background: var(--fg); color: var(--bg); align-self: center }
 
 .list { display: grid; gap: 12px }
@@ -112,13 +120,18 @@ p { margin: 0; max-width: 66ch }
 .chip { font: 12px/1 var(--mono); padding: 7px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line) }
 .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 32px }
 .two > * { min-width: 0 }
+.scene { margin: 16px 0 0; display: grid; gap: 4px }
+.scene canvas { width: 100%; height: 220px; display: block }
+#fep { height: 240px } #motor { height: 250px } #azu { height: 190px }
+.scene figcaption { font: 11px/1.5 var(--mono); color: var(--muted); opacity: .8 }
 footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font: 12px/1.6 var(--mono); color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px }
 
 @media (max-width: 600px) {
   .role, .item { grid-template-columns: 1fr }
   .gallery { grid-template-columns: 1fr }
   .avatar { width: 64px; height: 64px }
-  #bundle { height: 130px }
+  #bundle { height: 300px }
+  #motor { height: 360px }
 }
 </style>
 </head>
@@ -129,7 +142,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   </nav>
 
   <header class="hero">
-    <canvas id="bundle" role="img" aria-label="Animated four-helix coiled-coil bundle"></canvas>
+    <canvas id="bundle" role="img" aria-label="Animated four-helix coiled-coil bundle beside its helical-wheel diagram, with the a and d core positions highlighted"></canvas>
     <div class="who">
       <picture><source srcset="images/profile-480.webp" type="image/webp"><img class="avatar" src="images/profile-480.jpg" alt="Freddie Gabbutt-Martin" width="84" height="84"></picture>
       <div>
@@ -177,7 +190,8 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
     <h2>Experience</h2>
     <div>
       <div class="role"><div class="when">2025 – now</div><div><h3>Biologics All Access Applications Scientist</h3><div class="org"><a href="https://www.schrodinger.com">Schrödinger</a> · UK, hybrid</div>
-        <p>Biomolecular simulations, LiveDesign and lead optimisation for drug discovery; workshops and conference presentations.</p></div></div>
+        <p>Biomolecular simulations, LiveDesign and lead optimisation for drug discovery; workshops and conference presentations.</p>
+        <figure class="scene"><canvas id="fep" role="img" aria-label="Antibody bound to its antigen; a serine in CDR-H3 is alchemically grown into a tyrosine across lambda windows"></canvas><figcaption>Ser→Tyr in CDR-H3, grown across λ windows on an antibody–antigen structure. ΔΔG illustrative.</figcaption></figure></div></div>
       <div class="role"><div class="when">2022 – 2025</div><div><h3>Postdoctoral Research Associate</h3><div class="org"><a href="https://www.cpr.ku.dk/">Novo Nordisk Foundation Center for Protein Research</a>, University of Copenhagen</div>
         <ul>
           <li>Established AI-driven de novo protein design in a new laboratory, with a focus on therapeutic applications</li>
@@ -185,7 +199,8 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
           <li>Ran molecular dynamics to evaluate designs and to study ion channels and membrane motors</li>
           <li>Mined large sequence and structure databases for new mechanistic insight</li>
           <li>Led protein design workshops for students and postdocs; organised the NNF CPR Symposium and group retreats; contributed to grants and a review</li>
-        </ul></div></div>
+        </ul>
+        <figure class="scene"><canvas id="motor" role="img" aria-label="Top-down view of the Zorya ZorAB 5:2 motor stepping round, a phage injecting DNA that Zorya then degrades, and a designed miniprotein folding out of noise"></canvas><figcaption>Zorya ZorA₅B₂ motor (PDB 8QYH) from the periplasm · anti-phage defence · a de novo miniprotein.</figcaption></figure></div></div>
       <div class="role"><div class="when">2022</div><div><h3>Postdoctoral Research Associate</h3><div class="org">University of Bristol</div>
         <p>Prepared manuscripts from PhD projects, including internal and international collaborations.</p></div></div>
       <div class="role"><div class="when">2017 – 2022</div><div><h3>PhD researcher, Woolfson Lab</h3><div class="org"><a href="https://www.bristol.ac.uk/chemistry/">University of Bristol</a> · Chemical Synthesis CDT</div>
@@ -226,7 +241,8 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
     <h2>Education</h2>
     <div class="list">
       <div class="item"><div class="when">2017 – 2022</div><div><b>PhD, Chemical Synthesis CDT (Protein Design)</b><div class="org">University of Bristol</div></div></div>
-      <div class="item"><div class="when">2013 – 2017</div><div><b>MChem, Chemistry for Drug Discovery with Industrial Training</b><div class="org">University of Bath</div></div></div>
+      <div class="item"><div class="when">2013 – 2017</div><div><b>MChem, Chemistry for Drug Discovery with Industrial Training</b><div class="org">University of Bath</div>
+        <figure class="scene"><canvas id="azu" role="img" aria-label="Azulene with its HOMO coefficients, largest at C1 and C3, then two tetrahydrothiophenium groups bonded at those positions"></canvas><figcaption>Azulene HOMO (largest at C1 and C3) and its 1,3-bis(tetrahydrothiophenium) salt.</figcaption></figure></div></div>
     </div>
   </section>
 
@@ -238,6 +254,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
       <div class="metric"><b>9</b><span>h-index</span></div>
       <p>From <a href="https://scholar.google.com/citations?user=njpFdBUAAAAJ&amp;hl=en">Google Scholar</a>, September 2026. Papers before 2026 are under F. J. O. Martin.</p>
     </div>
+    <div class="filters" id="pubFilter" role="group" aria-label="Filter publications by topic"></div>
     <div id="pubs"></div>
   </section>
 
@@ -283,87 +300,48 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
 <script>
 // Publications (Google Scholar, September 2026). "me" marks my position in the author list.
 const PUBS = [
-  { y: 2026, t: "A benchmark of expert-level academic questions to assess AI capabilities", a: "L Phan, A Gatti, … <b>FJO Martin</b>, … (Center for AI Safety and Scale AI)", v: "Nature 649, 1139–1146", c: 729 },
-  { y: 2026, t: "Structure of a contractile injection system in Salmonella enterica subsp. salamae", a: "RN Ejaz, K Funke, CS Kielkopf, <b>FJO Martin</b>, M Šiborová, IA Hendriks, …", v: "Nature Communications", c: 1 },
-  { y: 2026, t: "Validation and analysis of 12,000 AI-driven CAR-T designs in the Bits to Binders competition", a: "CW Kosonocky, AM Abel, AL Feller, AEC Rieffer, PR Woolley, J Lála, … incl. <b>FJO Martin</b>", v: "bioRxiv", c: 10 },
-  { y: 2025, t: "Structure and mechanism of the Zorya anti-phage defence system", a: "H Hu, PF Popp, TCD Hughes, A Roa-Eguiara, NR Rutbeek, <b>FJO Martin</b>, …", v: "Nature 639, 1093–1101", c: 73 },
-  { y: 2025, t: "Exchange, promiscuity, and orthogonality in de novo designed coiled-coil peptide assemblies", a: "KW Kurgan, <b>FJO Martin</b>, WM Dawson, T Brunnock, AJ Orr-Ewing, …", v: "Chemical Science 16, 1826–1836", c: 4 },
-  { y: 2024, t: "Ion-driven rotary membrane motors: From structure to function", a: "<b>FJO Martin</b>, M Santiveri, H Hu, NMI Taylor", v: "Current Opinion in Structural Biology 88, 102884", c: 6, first: true },
-  { y: 2024, t: "How might large language models aid actors in reaching the competency threshold required to carry out a chemical attack?", a: "RT Stendall, <b>FJO Martin</b>, JB Sandbrink", v: "The Nonproliferation Review, 1–22", c: 12 },
-  { y: 2023, t: "Differential sensing with arrays of de novo designed peptide assemblies", a: "WM Dawson, KL Shelley, JM Fletcher, DA Scott, L Lombardi, GG Rhys, …", v: "Nature Communications 14, 383", c: 42 },
-  { y: 2023, t: "Ion selectivity and rotor coupling of the Vibrio flagellar sodium-driven stator unit", a: "H Hu, PF Popp, M Santiveri, A Roa-Eguiara, Y Yan, <b>FJO Martin</b>, Z Liu, …", v: "Nature Communications 14, 4411", c: 37 },
-  { y: 2023, t: "Molecular mechanism of STIL coiled-coil domain oligomerization", a: "M Shamir, <b>FJO Martin</b>, DN Woolfson, A Friedler", v: "International Journal of Molecular Sciences 24, 14616", c: 4 },
-  { y: 2022, t: "Exploring the dynamic and conformational landscape of α-helical peptide assemblies", a: "<b>F Martin</b>", v: "PhD thesis, University of Bristol", c: 1, first: true, thesis: true },
-  { y: 2021, t: "Coiled coils 9-to-5: rational de novo design of α-helical barrels with tunable oligomeric states", a: "WM Dawson, <b>FJO Martin</b>, GG Rhys, KL Shelley, RL Brady, DN Woolfson", v: "Chemical Science 12, 6923–6928", c: 74 },
-  { y: 2021, t: "How coiled-coil assemblies accommodate multiple aromatic residues", a: "GG Rhys, WM Dawson, JL Beesley, <b>FJO Martin</b>, RL Brady, AR Thomson, …", v: "Biomacromolecules 22, 2010–2019", c: 12 },
-  { y: 2020, t: "Azulenesulfonium and azulenebis(sulfonium) salts: formation by interrupted Pummerer reaction and subsequent derivatisation by nucleophiles", a: "CM Lopez-Alled, <b>FJO Martin</b>, KY Chen, G Kociok-Köhn, TD James, …", v: "Tetrahedron 76, 131700", c: 16 },
+  { y: 2026, t: "A benchmark of expert-level academic questions to assess AI capabilities", a: "L Phan, A Gatti, … <b>FJO Martin</b>, … (Center for AI Safety and Scale AI)", v: "Nature 649, 1139–1146", k: ["AI"], c: 729 },
+  { y: 2026, t: "Structure of a contractile injection system in Salmonella enterica subsp. salamae", a: "RN Ejaz, K Funke, CS Kielkopf, <b>FJO Martin</b>, M Šiborová, IA Hendriks, …", v: "Nature Communications", k: ["Molecular Machines"], c: 1 },
+  { y: 2026, t: "Validation and analysis of 12,000 AI-driven CAR-T designs in the Bits to Binders competition", a: "CW Kosonocky, AM Abel, AL Feller, AEC Rieffer, PR Woolley, J Lála, … incl. <b>FJO Martin</b>", v: "bioRxiv", k: ["AI", "Protein Design"], c: 10 },
+  { y: 2025, t: "Structure and mechanism of the Zorya anti-phage defence system", a: "H Hu, PF Popp, TCD Hughes, A Roa-Eguiara, NR Rutbeek, <b>FJO Martin</b>, …", v: "Nature 639, 1093–1101", k: ["Molecular Machines"], c: 73 },
+  { y: 2025, t: "Exchange, promiscuity, and orthogonality in de novo designed coiled-coil peptide assemblies", a: "KW Kurgan, <b>FJO Martin</b>, WM Dawson, T Brunnock, AJ Orr-Ewing, …", v: "Chemical Science 16, 1826–1836", k: ["Protein Design"], c: 4, first: true },
+  { y: 2024, t: "Ion-driven rotary membrane motors: From structure to function", a: "<b>FJO Martin</b>, M Santiveri, H Hu, NMI Taylor", v: "Current Opinion in Structural Biology 88, 102884", k: ["Molecular Machines"], c: 6, first: true },
+  { y: 2024, t: "How might large language models aid actors in reaching the competency threshold required to carry out a chemical attack?", a: "RT Stendall, <b>FJO Martin</b>, JB Sandbrink", v: "The Nonproliferation Review, 1–22", k: ["AI"], c: 12 },
+  { y: 2023, t: "Differential sensing with arrays of de novo designed peptide assemblies", a: "WM Dawson, KL Shelley, JM Fletcher, DA Scott, L Lombardi, GG Rhys, …", v: "Nature Communications 14, 383", k: ["Protein Design"], c: 42 },
+  { y: 2023, t: "Ion selectivity and rotor coupling of the Vibrio flagellar sodium-driven stator unit", a: "H Hu, PF Popp, M Santiveri, A Roa-Eguiara, Y Yan, <b>FJO Martin</b>, Z Liu, …", v: "Nature Communications 14, 4411", k: ["Molecular Machines"], c: 37 },
+  { y: 2023, t: "Molecular mechanism of STIL coiled-coil domain oligomerization", a: "M Shamir, <b>FJO Martin</b>, DN Woolfson, A Friedler", v: "International Journal of Molecular Sciences 24, 14616", k: ["Protein Design"], c: 4, first: true },
+  { y: 2022, t: "Exploring the dynamic and conformational landscape of α-helical peptide assemblies", a: "<b>F Martin</b>", v: "PhD thesis, University of Bristol", k: ["Protein Design"], c: 1, first: true, thesis: true },
+  { y: 2021, t: "Coiled coils 9-to-5: rational de novo design of α-helical barrels with tunable oligomeric states", a: "WM Dawson, <b>FJO Martin</b>, GG Rhys, KL Shelley, RL Brady, DN Woolfson", v: "Chemical Science 12, 6923–6928", k: ["Protein Design"], c: 74 },
+  { y: 2021, t: "How coiled-coil assemblies accommodate multiple aromatic residues", a: "GG Rhys, WM Dawson, JL Beesley, <b>FJO Martin</b>, RL Brady, AR Thomson, …", v: "Biomacromolecules 22, 2010–2019", k: ["Protein Design"], c: 12 },
+  { y: 2020, t: "Azulenesulfonium and azulenebis(sulfonium) salts: formation by interrupted Pummerer reaction and subsequent derivatisation by nucleophiles", a: "CM Lopez-Alled, <b>FJO Martin</b>, KY Chen, G Kociok-Köhn, TD James, …", v: "Tetrahedron 76, 131700", k: ["Chemistry"], c: 16 },
 ];
 (() => {
-  const host = document.getElementById('pubs');
-  let year = null, html = '';
-  for (const p of PUBS) {
-    if (p.y !== year) { year = p.y; html += `<div class="year">${year}</div>`; }
-    const q = encodeURIComponent(`"${p.t}"`);
-    html += `<article class="pub"><h3><a href="https://scholar.google.com/scholar?q=${q}">${p.t}</a></h3>
+  const host = document.getElementById('pubs'), bar = document.getElementById('pubFilter');
+  const CATS = ['All', 'AI', 'Protein Design', 'Molecular Machines', 'Chemistry'];
+  const count = c => c === 'All' ? PUBS.length : PUBS.filter(p => p.k.includes(c)).length;
+  bar.innerHTML = CATS.map(c => `<button type="button" class="filter" data-cat="${c}" aria-pressed="${c === 'All'}">${c} <span>${count(c)}</span></button>`).join('');
+  function render(cat) {
+    let year = null, html = '';
+    for (const p of PUBS) {
+      if (cat !== 'All' && !p.k.includes(cat)) continue;
+      if (p.y !== year) { year = p.y; html += `<div class="year">${year}</div>`; }
+      const q = encodeURIComponent(`"${p.t}"`);
+      const tags = p.k.map(k => `<span class="tag" data-cat="${k}">${k}</span>`).join('');
+      html += `<article class="pub"><h3><a href="https://scholar.google.com/scholar?q=${q}">${p.t}</a></h3>
       <div class="authors">${p.a}</div>
-      <div class="src"><span>${p.v}</span><span>${p.c.toLocaleString('en-GB')} citation${p.c === 1 ? '' : 's'}</span>${p.first ? `<span class="badge">${p.thesis ? 'thesis' : 'first author'}</span>` : ''}</div></article>`;
+      <div class="src"><span>${p.v}</span><span>${p.c.toLocaleString('en-GB')} citation${p.c === 1 ? '' : 's'}</span>${p.first ? `<span class="badge">${p.thesis ? 'thesis' : 'first author'}</span>` : ''}${tags}</div></article>`;
+    }
+    host.innerHTML = html;
   }
-  host.innerHTML = html;
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('.filter'); if (!b) return;
+    bar.querySelectorAll('.filter').forEach(x => x.setAttribute('aria-pressed', x === b));
+    render(b.dataset.cat);
+  });
+  render('All');
 })();
 
-// Coiled coil: Crick-style parametric four-helix bundle, drawn as shaded Cα spheres
-(() => {
-  const cv = document.getElementById('bundle'), ctx = cv.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const pts = [], N = 56;
-  for (let h = 0; h < 4; h++) {
-    const phi = h * Math.PI / 2, up = h % 2 ? -1 : 1;
-    for (let i = 0; i < N; i++) {
-      const a = -0.063 * i + phi, R0 = 7.2, R1 = 2.3, b = 1.795 * i * up;
-      pts.push({ h, x: R0 * Math.cos(a) + R1 * (Math.cos(a) * Math.cos(b) - Math.sin(a) * Math.sin(b)),
-                    y: R0 * Math.sin(a) + R1 * (Math.sin(a) * Math.cos(b) + Math.cos(a) * Math.sin(b)),
-                    z: (i - N / 2) * 1.5 });
-    }
-  }
-  let rot = 0.4, drag = null, visible = true, col = [];
-  const tilt = 0.35;
-  const readColors = () => { const s = getComputedStyle(document.documentElement); col = ['--c1', '--c2', '--c3', '--c4'].map(k => s.getPropertyValue(k).trim()); };
-  readColors();
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); draw(); });
-  cv.addEventListener('pointerdown', e => { drag = e.clientX; cv.setPointerCapture(e.pointerId); });
-  cv.addEventListener('pointermove', e => { if (drag !== null) { rot += (e.clientX - drag) * 0.01; drag = e.clientX; if (reduce) draw(); } });
-  cv.addEventListener('pointerup', () => drag = null);
-  cv.addEventListener('pointercancel', () => drag = null);
-  function draw() {
-    const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
-    if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-    const sc = Math.min(W / 92, H / 26);
-    const proj = pts.map(p => {
-      const y1 = p.y * Math.cos(rot) - p.x * Math.sin(rot), d1 = p.y * Math.sin(rot) + p.x * Math.cos(rot);
-      return { h: p.h, X: W / 2 + p.z * sc, Y: H / 2 + (y1 * Math.cos(tilt) - d1 * Math.sin(tilt)) * sc, D: y1 * Math.sin(tilt) + d1 * Math.cos(tilt) };
-    });
-    ctx.lineWidth = 1.5; ctx.globalAlpha = 0.35;
-    for (let h = 0; h < 4; h++) {
-      ctx.beginPath(); ctx.strokeStyle = col[h];
-      for (let i = 0; i < N; i++) { const p = proj[h * N + i]; i ? ctx.lineTo(p.X, p.Y) : ctx.moveTo(p.X, p.Y); }
-      ctx.stroke();
-    }
-    proj.sort((a, b) => a.D - b.D);
-    for (const p of proj) {
-      const depth = Math.max(0, Math.min(1, (p.D + 10) / 20)), r = sc * (0.75 + 0.45 * depth);
-      ctx.globalAlpha = 0.35 + 0.65 * depth;
-      const g = ctx.createRadialGradient(p.X - r * .35, p.Y - r * .35, r * .1, p.X, p.Y, r);
-      g.addColorStop(0, '#ffffff'); g.addColorStop(0.35, col[p.h]); g.addColorStop(1, col[p.h]);
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.X, p.Y, r, 0, Math.PI * 2); ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-  }
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(cv);
-  function loop() { if (visible) { if (drag === null) rot += 0.006; draw(); } requestAnimationFrame(loop); }
-  addEventListener('resize', draw);
-  reduce ? draw() : loop();
-})();
 </script>
+<script src="scenes.js" defer></script>
 </body>
 </html>
