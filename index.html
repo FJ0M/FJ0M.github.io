@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one calm reading column; a thin braid of four helices opens the page and its four chain colours become the section accents */
+/* Layout: one calm reading column; a thin four-colour rule opens the page and its four chain colours become the section accents */
 :root {
   --bg: #f5f6f8; --surface: #ffffff; --fg: #121820; --muted: #5b6573; --line: #dde1e7;
   --c1: #0f8b8d; --c2: #d4573b; --c3: #b8850f; --c4: #6b5bd2;
@@ -46,7 +46,7 @@ nav.top a { text-decoration: none }
 nav.top a:hover { color: var(--fg) }
 
 header.hero { padding-block: 16px 0 }
-#strand { width: 100%; height: 40px; display: block; margin-bottom: 20px }
+.rule { height: 2px; margin: 4px 0 28px; background: linear-gradient(90deg, var(--c1) 0 25%, var(--c2) 25% 50%, var(--c3) 50% 75%, var(--c4) 75%) }
 #cc { cursor: grab; touch-action: pan-y } #cc:active { cursor: grabbing }
 .who { display: flex; gap: 20px; align-items: center; margin-top: -4px }
 .who > div { min-width: 0 }
@@ -142,7 +142,7 @@ footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line);
   </nav>
 
   <header class="hero">
-    <canvas id="strand" aria-hidden="true"></canvas>
+    <div class="rule" aria-hidden="true"></div>
     <div class="who">
       <picture><source srcset="images/profile-480.webp" type="image/webp"><img class="avatar" src="images/profile-480.jpg" alt="Freddie Gabbutt-Martin" width="84" height="84"></picture>
       <div>
